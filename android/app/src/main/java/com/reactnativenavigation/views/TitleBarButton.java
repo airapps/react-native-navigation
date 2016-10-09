@@ -1,32 +1,38 @@
 package com.reactnativenavigation.views;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.reactnativenavigation.NavigationApplication;
+import com.reactnativenavigation.params.ContextualMenuButtonParams;
 import com.reactnativenavigation.params.TitleBarButtonParams;
 import com.reactnativenavigation.utils.ViewUtils;
 
 import java.util.ArrayList;
 
-public class TitleBarButton implements MenuItem.OnMenuItemClickListener {
+class TitleBarButton implements MenuItem.OnMenuItemClickListener {
 
     private final Menu menu;
     private final View parent;
     private TitleBarButtonParams buttonParams;
-    private String navigatorEventId;
+    @Nullable private String navigatorEventId;
 
-    public TitleBarButton(Menu menu, View parent, TitleBarButtonParams buttonParams, String navigatorEventId) {
+    TitleBarButton(Menu menu, View parent, ContextualMenuButtonParams contextualMenuButtonParams) {
+        this(menu, parent, contextualMenuButtonParams, null);
+    }
+
+    TitleBarButton(Menu menu, View parent, TitleBarButtonParams buttonParams, @Nullable String navigatorEventId) {
         this.menu = menu;
         this.parent = parent;
         this.buttonParams = buttonParams;
         this.navigatorEventId = navigatorEventId;
     }
 
-    public MenuItem addToMenu(int index) {
+    MenuItem addToMenu(int index) {
         MenuItem item = menu.add(Menu.NONE, Menu.NONE, index, buttonParams.label);
         item.setShowAsAction(buttonParams.showAsAction.action);
         item.setEnabled(buttonParams.enabled);

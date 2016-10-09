@@ -8,8 +8,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.widget.RelativeLayout;
 
+import com.facebook.react.bridge.Callback;
 import com.reactnativenavigation.animation.VisibilityAnimator;
+import com.reactnativenavigation.events.ContextualMenuDismissed;
+import com.reactnativenavigation.events.Event;
+import com.reactnativenavigation.events.EventBus;
+import com.reactnativenavigation.events.Subscriber;
 import com.reactnativenavigation.params.BaseScreenParams;
+import com.reactnativenavigation.params.ContextualMenuParams;
 import com.reactnativenavigation.params.ScreenParams;
 import com.reactnativenavigation.params.StyleParams;
 import com.reactnativenavigation.params.TitleBarButtonParams;
@@ -23,7 +29,7 @@ import java.util.List;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
-public abstract class Screen extends RelativeLayout {
+public abstract class Screen extends RelativeLayout implements Subscriber {
 
     public interface OnDisplayListener {
         void onDisplay();
@@ -45,6 +51,15 @@ public abstract class Screen extends RelativeLayout {
         this.leftButtonOnClickListener = leftButtonOnClickListener;
         screenAnimator = new ScreenAnimator(this);
         createViews();
+        EventBus.instance.register(this);
+    }
+
+    @Override
+    public void onEvent(Event event) {
+        if (ContextualMenuDismissed.TYPE.equals(event.getType()) && isShown()) {
+            setStyle();
+            topBar.onContextualMenuDismissed();
+        }
     }
 
     public void setStyle() {
@@ -193,5 +208,15 @@ public abstract class Screen extends RelativeLayout {
 
     public void hide(boolean animated, Runnable onAnimatedEnd) {
         screenAnimator.hide(animated, onAnimatedEnd);
+    }
+
+    public void showContextualMenu(ContextualMenuParams params, Callback onButtonClicked) {
+        topBar.showContextualMenu(params, styleParams, onButtonClicked);
+        setStatusBarColor(styleParams.contextualMenuStatusBarColor);
+    }
+
+    public void destroy() {
+        unmountReactView();
+        EventBus.instance.unregister(this);
     }
 }
