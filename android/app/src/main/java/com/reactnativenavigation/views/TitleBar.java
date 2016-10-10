@@ -148,6 +148,10 @@ public class TitleBar extends Toolbar {
     }
 
     public void show() {
+        if (getAlpha() == 1) {
+            return;
+        }
+
         setAlpha(0);
         animate()
                 .alpha(1)

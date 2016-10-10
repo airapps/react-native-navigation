@@ -10,10 +10,11 @@ import android.widget.RelativeLayout;
 
 import com.facebook.react.bridge.Callback;
 import com.reactnativenavigation.animation.VisibilityAnimator;
-import com.reactnativenavigation.events.ContextualMenuDismissed;
+import com.reactnativenavigation.events.ContextualMenuHiddenEvent;
 import com.reactnativenavigation.events.Event;
 import com.reactnativenavigation.events.EventBus;
 import com.reactnativenavigation.events.Subscriber;
+import com.reactnativenavigation.events.ViewPagerScreenChangedEvent;
 import com.reactnativenavigation.params.BaseScreenParams;
 import com.reactnativenavigation.params.ContextualMenuParams;
 import com.reactnativenavigation.params.ScreenParams;
@@ -56,9 +57,13 @@ public abstract class Screen extends RelativeLayout implements Subscriber {
 
     @Override
     public void onEvent(Event event) {
-        if (ContextualMenuDismissed.TYPE.equals(event.getType()) && isShown()) {
+        if (ContextualMenuHiddenEvent.TYPE.equals(event.getType()) && isShown()) {
             setStyle();
-            topBar.onContextualMenuDismissed();
+            topBar.onContextualMenuHidden();
+        }
+        if (ViewPagerScreenChangedEvent.TYPE.equals(event.getType()) && isShown() ) {
+            setStyle();
+            topBar.hideContextualMenu();
         }
     }
 
@@ -144,9 +149,7 @@ public abstract class Screen extends RelativeLayout implements Subscriber {
         return screenParams.getScreenInstanceId();
     }
 
-    public String getNavigatorEventId() {
-        return screenParams.getNavigatorEventId();
-    }
+    public abstract String getNavigatorEventId();
 
     public BaseScreenParams getScreenParams() {
         return screenParams;
@@ -211,7 +214,8 @@ public abstract class Screen extends RelativeLayout implements Subscriber {
     }
 
     public void showContextualMenu(ContextualMenuParams params, Callback onButtonClicked) {
-        topBar.showContextualMenu(params, styleParams, onButtonClicked);
+        params.setButtonsColor(styleParams.contextualMenuButtonsColor);
+        topBar.showContextualMenu(params, styleParams.contextualMenuBackgroundColor, onButtonClicked);
         setStatusBarColor(styleParams.contextualMenuStatusBarColor);
     }
 

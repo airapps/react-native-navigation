@@ -103,10 +103,10 @@ public class TopBar extends AppBarLayout {
         topTabs.setSelectedTabIndicatorStyle(style);
     }
 
-    public void showContextualMenu(final ContextualMenuParams params, StyleParams styleParams, Callback onButtonClicked) {
-        contextualMenu = new ContextualMenu(getContext(), styleParams, onButtonClicked);
+    public void showContextualMenu(final ContextualMenuParams params, StyleParams.Color contextualMenuBackgroundColor, Callback onButtonClicked) {
+        contextualMenu = new ContextualMenu(getContext(), contextualMenuBackgroundColor, onButtonClicked);
         titleBarAndContextualMenuContainer.addView(contextualMenu, new ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
-        contextualMenu.setButtons(params.buttons, params.leftButton, styleParams.contextualMenuButtonsColor);
+        contextualMenu.setButtons(params.buttons, params.leftButton);
         ViewUtils.runOnPreDraw(contextualMenu, new Runnable() {
             @Override
             public void run() {
@@ -116,7 +116,14 @@ public class TopBar extends AppBarLayout {
         });
     }
 
-    public void onContextualMenuDismissed() {
+    public void onContextualMenuHidden() {
+        titleBar.show();
+    }
+
+    public void hideContextualMenu() {
+        if (contextualMenu != null) {
+            contextualMenu.hide();
+        }
         titleBar.show();
     }
 }

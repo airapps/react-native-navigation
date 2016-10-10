@@ -469,11 +469,12 @@ function showContextualMenu(params, onButtonPressed) {
     backButton: {id: 'back'}
   };
 
-  params.rightButtons.forEach((button) => {
+  params.rightButtons.forEach((button, index) => {
     const btn = {
       icon: resolveAssetSource(button.icon).uri,
       color: processColor(button.color),
-      label: button.title
+      label: button.title,
+      index
     };
     contextualMenu.buttons.push(btn);
   });

@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.reactnativenavigation.NavigationApplication;
-import com.reactnativenavigation.params.ContextualMenuButtonParams;
 import com.reactnativenavigation.params.TitleBarButtonParams;
 import com.reactnativenavigation.utils.ViewUtils;
 
@@ -18,12 +17,8 @@ class TitleBarButton implements MenuItem.OnMenuItemClickListener {
 
     private final Menu menu;
     private final View parent;
-    private TitleBarButtonParams buttonParams;
+    protected TitleBarButtonParams buttonParams;
     @Nullable private String navigatorEventId;
-
-    TitleBarButton(Menu menu, View parent, ContextualMenuButtonParams contextualMenuButtonParams) {
-        this(menu, parent, contextualMenuButtonParams, null);
-    }
 
     TitleBarButton(Menu menu, View parent, TitleBarButtonParams buttonParams, @Nullable String navigatorEventId) {
         this.menu = menu;

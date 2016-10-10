@@ -1,6 +1,6 @@
 package com.reactnativenavigation.events;
 
-public class ContextualMenuDismissed implements Event {
+public class ContextualMenuHiddenEvent implements Event {
     public static final String TYPE = "ContextualMenuDismissed";
     @Override
     public String getType() {
