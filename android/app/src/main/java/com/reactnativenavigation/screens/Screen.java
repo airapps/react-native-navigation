@@ -63,7 +63,7 @@ public abstract class Screen extends RelativeLayout implements Subscriber {
         }
         if (ViewPagerScreenChangedEvent.TYPE.equals(event.getType()) && isShown() ) {
             setStyle();
-            topBar.hideContextualMenu();
+            topBar.dismissContextualMenu();
         }
     }
 

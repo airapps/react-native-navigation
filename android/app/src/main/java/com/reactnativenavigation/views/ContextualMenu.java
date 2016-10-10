@@ -4,9 +4,11 @@ import android.content.Context;
 import android.view.Menu;
 
 import com.facebook.react.bridge.Callback;
+import com.reactnativenavigation.NavigationApplication;
 import com.reactnativenavigation.events.ContextualMenuHiddenEvent;
 import com.reactnativenavigation.events.EventBus;
 import com.reactnativenavigation.params.ContextualMenuButtonParams;
+import com.reactnativenavigation.params.ContextualMenuParams;
 import com.reactnativenavigation.params.StyleParams;
 import com.reactnativenavigation.params.TitleBarLeftButtonParams;
 
@@ -14,11 +16,14 @@ import java.util.List;
 
 public class ContextualMenu extends TitleBar implements LeftButtonOnClickListener, ContextualMenuButton.ContextualButtonClickListener {
     private Callback onButtonClicked;
+    private final String navigatorEventId;
 
-    public ContextualMenu(Context context, StyleParams.Color contextualMenuBackgroundColor, Callback onButtonClicked) {
+    public ContextualMenu(Context context, ContextualMenuParams params, StyleParams.Color contextualMenuBackgroundColor, Callback onButtonClicked) {
         super(context);
         this.onButtonClicked = onButtonClicked;
+        navigatorEventId = params.navigationParams.navigatorEventId;
         setStyle(contextualMenuBackgroundColor);
+        setButtons(params.buttons, params.leftButton);
     }
 
     public void setStyle(StyleParams.Color contextualMenuBackgroundColor) {
@@ -45,7 +50,7 @@ public class ContextualMenu extends TitleBar implements LeftButtonOnClickListene
 
     @Override
     public boolean onTitleBarBackButtonClick() {
-        hide();
+        dismiss();
         EventBus.instance.post(new ContextualMenuHiddenEvent());
         return true;
     }
@@ -57,8 +62,13 @@ public class ContextualMenu extends TitleBar implements LeftButtonOnClickListene
 
     @Override
     public void onClick(int index) {
-        hide();
+        dismiss();
         EventBus.instance.post(new ContextualMenuHiddenEvent());
         onButtonClicked.invoke(index);
+    }
+
+    public void dismiss() {
+        hide();
+        NavigationApplication.instance.sendNavigatorEvent("contextualMenuDismissed", navigatorEventId);
     }
 }

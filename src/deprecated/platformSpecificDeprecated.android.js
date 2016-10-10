@@ -463,10 +463,11 @@ function showSnackbar(navigator, params) {
   return newPlatformSpecific.showSnackbar(params);
 }
 
-function showContextualMenu(params, onButtonPressed) {
+function showContextualMenu(navigator, params, onButtonPressed) {
   const contextualMenu = {
     buttons: [],
-    backButton: {id: 'back'}
+    backButton: {id: 'back'},
+    navigationParams: {navigatorEventID: navigator.navigatorEventID}
   };
 
   params.rightButtons.forEach((button, index) => {

@@ -111,7 +111,7 @@ class Navigator {
   }
 
   showContextualMenu(params, onButtonPressed) {
-    return platformSpecific.showContextualMenu(params, onButtonPressed);
+    return platformSpecific.showContextualMenu(this, params, onButtonPressed);
   }
 
   setOnNavigatorEvent(callback) {

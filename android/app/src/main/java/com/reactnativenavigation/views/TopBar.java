@@ -104,9 +104,8 @@ public class TopBar extends AppBarLayout {
     }
 
     public void showContextualMenu(final ContextualMenuParams params, StyleParams.Color contextualMenuBackgroundColor, Callback onButtonClicked) {
-        contextualMenu = new ContextualMenu(getContext(), contextualMenuBackgroundColor, onButtonClicked);
+        contextualMenu = new ContextualMenu(getContext(), params, contextualMenuBackgroundColor, onButtonClicked);
         titleBarAndContextualMenuContainer.addView(contextualMenu, new ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
-        contextualMenu.setButtons(params.buttons, params.leftButton);
         ViewUtils.runOnPreDraw(contextualMenu, new Runnable() {
             @Override
             public void run() {
@@ -120,10 +119,11 @@ public class TopBar extends AppBarLayout {
         titleBar.show();
     }
 
-    public void hideContextualMenu() {
+    public void dismissContextualMenu() {
         if (contextualMenu != null) {
-            contextualMenu.hide();
+            contextualMenu.dismiss();
+            contextualMenu = null;
+            titleBar.show();
         }
-        titleBar.show();
     }
 }
